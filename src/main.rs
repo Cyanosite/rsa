@@ -1,5 +1,6 @@
 use rand::Rng;
 use std::sync::mpsc;
+const MAGIC_NUMBER: i128 = 65537;
 
 fn main() {
     let (tx, rx) = mpsc::channel();
@@ -29,17 +30,27 @@ fn main() {
     let phi_n: i128 = (primes[0] - 1) * (primes[1] - 1);
     println!("phi(N) = {}", phi_n);
 
-    let mut encrypt: i128 = 'a' as i128;
-    println!("encrypt = {}", encrypt as u8 as char);
+    let mut mymessage = vec!['a' as i128, 'l' as i128, 'm' as i128, 'a' as i128];
+    print_message(&mymessage);
+    for letter in &mut mymessage {
+        *letter = exponentiation(n, *letter, MAGIC_NUMBER);
+    }
+    print_message(&mymessage);
 
-    encrypt = exponentiation(n, encrypt, 65537);
-    println!("encrypted = {}", encrypt);
-
-    let decryption_key: i128 = congruence(65537, 1, phi_n);
+    let decryption_key: i128 = congruence(MAGIC_NUMBER, 1, phi_n);
     println!("decryption key = {}", decryption_key);
 
-    encrypt = exponentiation(n, encrypt, decryption_key);
-    println!("decrypted = {}", encrypt as u8 as char);
+    for letter in &mut mymessage {
+        *letter = exponentiation(n, *letter, decryption_key);
+    }
+    print_message(&mymessage);
+}
+
+fn print_message(message: &Vec<i128>) {
+    for letter in message {
+        print!("{}", *letter as u8 as char);
+    }
+    println!("");
 }
 
 fn euclidean(mut m: i128, mut a: i128) -> i128 {
