@@ -1,18 +1,29 @@
 use rand::Rng;
+use std::sync::mpsc;
 
 fn main() {
+    let (tx, rx) = mpsc::channel();
     let mut primes = [0i128; 2];
-    while primes[1] == 0 {
+
+    std::thread::spawn(move || loop {
         let prime: i128 = rand::thread_rng().gen::<u64>() as i128 % 1000000000;
         if prime_check(prime) {
             println!("{} is a prime", prime);
-            if primes[0] == 0 {
-                primes[0] = prime;
-            } else {
-                primes[1] = prime;
-            }
+            tx.send(prime).unwrap();
+            break;
+        }
+    });
+
+    loop {
+        let prime: i128 = rand::thread_rng().gen::<u64>() as i128 % 1000000000;
+        if prime_check(prime) {
+            println!("{} is a prime", prime);
+            primes[1] = prime;
+            break;
         }
     }
+    primes[0] = rx.recv().unwrap();
+
     let n: i128 = primes[0] * primes[1];
     println!("N = {}", n);
     let phi_n: i128 = (primes[0] - 1) * (primes[1] - 1);
