@@ -94,7 +94,7 @@ impl From<&str> for Message {
 }
 
 fn main() {
-    let mut message = Message::from("Ezt az üzenetet senki sem láthatja!!!");
+    let mut message = Message::from("Secret message.");
     message.print();
     message.encrypt();
     message.print();
