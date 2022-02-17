@@ -52,7 +52,7 @@ impl Message {
             }
         }
         primes[0] = rx.recv().unwrap();
-        self.public_key = primes[0].clone() * primes[1].clone();
+        self.public_key = &primes[0] * &primes[1];
         self.private_key = (primes[0].clone(), primes[1].clone());
         for letter in &mut self.message {
             *letter = exponentiation(
