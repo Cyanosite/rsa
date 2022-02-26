@@ -20,7 +20,7 @@ pub mod algorithms {
             if &b % 2i64 == one {
                 c = (c * &a) % &m;
             }
-            b /= 2i64;
+            b = b >> 1;
             if b == null {
                 return if c < null { c + m } else { c };
             }
