@@ -16,16 +16,6 @@ pub mod algorithms {
         let mut c: BigInt = 1i64.to_bigint().unwrap();
         let null = 0i64.to_bigint().unwrap();
         let one = 1i64.to_bigint().unwrap();
-        /*loop {
-            if &b & &one == one {
-                c = (c * &a) % &m;
-            }
-            b = b >> 1;
-            if b == null {
-                return if c < null { c + m } else { c };
-            }
-            a = (&a * &a) % &m;
-        }*/
         a = a % &m;
         while b != null {
             if &b & &one == one {
